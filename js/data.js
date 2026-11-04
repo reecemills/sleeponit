@@ -5,7 +5,7 @@ window.SOI = window.SOI || {};
 
 SOI.data = {
   // World bounds and the discovery grid (implementation plan 3.3: 2 m cells).
-  world: { minX: -70, maxX: 70, minZ: -50, maxZ: 50, cell: 2 },
+  world: { minX: -70, maxX: 90, minZ: -50, maxZ: 50, cell: 2 },
 
   tunables: {
     // Time (3.2). Game minutes per real second. The day starts after school.
@@ -34,11 +34,11 @@ SOI.data = {
     demonHp: 2,
     demonSpeed: 2.6,
     demonGrabSlow: 0.5,                // speed multiplier while grabbed
-    demonBiteCooldown: 1.6,            // s between hits while in contact
+    demonBiteCooldown: 2.4,            // s between hits while in contact
     dodgeDistance: 3.0,
     dodgeInvuln: 0.5,
-    baseEncounterBudget: 4,            // demons on a calm block
-    tripEncounterBonus: 6,             // extra demons near the bus after the shoelace trip
+    baseEncounterBudget: 3,            // demons on a calm block
+    tripEncounterBonus: 4,             // extra demons near the bus after the shoelace trip
   },
 
   // Calendar: each played day stands for about a week (design doc). Themed days are flavour only.
@@ -69,7 +69,7 @@ SOI.data = {
   // Where items start. owner: 'chest' | 'world' (placed by world.js interactables) | a character id.
   startOwnership: {
     toysword: 'chest', kitestring: 'chest', bottlecaps: 'chest',
-    rope: 'world', padlock: 'world', ruler: 'world', tape: 'world', ball: 'world', torch: 'world', marbles: 'world', smallkey: 'world',
+    rope: 'world', padlock: 'world', ruler: 'bedroom', tape: 'world', ball: 'world', torch: 'world', marbles: 'world', smallkey: 'world',
   },
 
   // Authored recipes (3.7). inputs are unordered. The result is hidden until the dream.

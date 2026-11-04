@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sleep On It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Patrick+Hand&family=Schoolbell&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/ui.css">
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+<svg class="symbols" width="0" height="0" aria-hidden="true" focusable="false">
+ <defs>
+  <pattern id="hHeart" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><line x1="0" y1="0" x2="0" y2="5" stroke="#e8786c" stroke-width="2.4"/></pattern>
+  <symbol id="i-heart" viewBox="0 0 48 48"><path d="M24 41C8 29 6 18 13 12 18 8 23 11 24 16 25 11 30 8 35 12 42 18 40 29 24 41Z"/></symbol>
+  <symbol id="i-pack" viewBox="0 0 48 48"><path d="M14 18C14 10 34 10 34 18L36 40C36 42 34 43 32 43H16C14 43 12 42 12 40Z"/><path d="M17 30H31M20 22V26M28 22V26M19 12C19 6 29 6 29 12"/></symbol>
+  <symbol id="i-rope" viewBox="0 0 48 48"><path d="M8 28C8 17 40 17 40 28 40 38 8 38 8 28Z"/><path d="M13 28C13 22 35 22 35 28 35 33 13 33 13 28Z"/><path d="M38 31C42 35 40 40 45 43"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 48 48"><rect x="9" y="21" width="30" height="21" rx="4"/><path d="M15 21V15C15 5 33 5 33 15V21M24 28V35"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 48 48"><path d="M5 31 29 7 41 19 17 43Z"/><path d="M13 27l4 4M19 21l3 3M25 15l4 4"/></symbol>
+  <symbol id="i-tape" viewBox="0 0 48 48"><circle cx="22" cy="26" r="15"/><circle cx="22" cy="26" r="5"/><path d="M37 26H45V35H33"/></symbol>
+  <symbol id="i-ball" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><path d="M7 24H41M24 7C15 15 15 33 24 41M24 7C33 15 33 33 24 41"/></symbol>
+  <symbol id="i-torch" viewBox="0 0 48 48"><path d="M8 18H24L31 11V37L24 30H8Z"/><path d="M31 18H43M31 24H45M31 30H43"/></symbol>
+  <symbol id="i-marbles" viewBox="0 0 48 48"><circle cx="16" cy="30" r="9"/><circle cx="33" cy="30" r="9"/><circle cx="24" cy="14" r="9"/><path d="M12 27C13 25 15 24 17 24M29 27C30 25 32 24 34 24M20 11C21 9 23 8 25 8"/></symbol>
+  <symbol id="i-key" viewBox="0 0 48 48"><circle cx="14" cy="24" r="8"/><path d="M22 24H43M36 24V31M43 24V29"/></symbol>
+  <symbol id="i-sword" viewBox="0 0 48 48"><path d="M20 30 40 8 41 7 41 12 24 34Z"/><path d="M12 24L26 38M17 31L9 39"/><path d="M8 40L6 42"/></symbol>
+  <symbol id="i-string" viewBox="0 0 48 48"><ellipse cx="24" cy="11" rx="12" ry="4.5"/><path d="M12 11V37C12 41 36 41 36 37V11"/><path d="M12 19C20 23 28 15 36 19M12 27C20 31 28 23 36 27"/><path d="M36 34C42 34 44 40 40 44"/></symbol>
+  <symbol id="i-caps" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"/><circle cx="24" cy="24" r="10"/><path d="M24 4V9M24 39V44M4 24H9M39 24H44M10 10l3 3M35 35l3 3M38 10l-3 3M13 35l-3 3"/></symbol>
+  <symbol id="i-chain" viewBox="0 0 48 48"><ellipse cx="13" cy="35" rx="10" ry="5.5" transform="rotate(-45 13 35)"/><ellipse cx="24" cy="24" rx="10" ry="5.5" transform="rotate(-45 24 24)"/><ellipse cx="35" cy="13" rx="10" ry="5.5" transform="rotate(-45 35 13)"/></symbol>
+  <symbol id="i-bow" viewBox="0 0 48 48"><path d="M10 5C38 12 38 36 10 43"/><path d="M10 5V43M10 24H43M37 18L43 24 37 30"/></symbol>
+  <symbol id="i-flail" viewBox="0 0 48 48"><path d="M5 43L17 31"/><path d="M17 31C20 24 14 20 20 15"/><circle cx="33" cy="15" r="8"/><path d="M33 3V6M33 24V27M21 15H24M42 15H45M25 7l2 2M39 21l2 2M41 7l-2 2M25 23l2-2"/></symbol>
+  <symbol id="i-spear" viewBox="0 0 48 48"><path d="M5 43L34 14"/><path d="M30 10L40 4 44 8 38 18Z"/><path d="M12 36l-3-3"/></symbol>
+  <symbol id="i-mace" viewBox="0 0 48 48"><path d="M5 43L24 24"/><circle cx="33" cy="15" r="9"/><path d="M33 2V6M33 24V28M20 15H24M42 15H46M24 6l3 3M42 24l-3-3M42 6l-3 3M24 24l3-3"/></symbol>
+  <symbol id="i-sling" viewBox="0 0 48 48"><path d="M24 44V28M24 28L10 8M24 28L38 8"/><path d="M10 8C16 18 32 18 38 8"/><circle cx="24" cy="17" r="4"/></symbol>
+  <symbol id="i-lump" viewBox="0 0 48 48"><path d="M8 32C4 22 12 12 20 14 24 6 36 8 38 17 46 20 44 34 36 38 30 43 14 42 8 32Z"/><path d="M18 24C20 22 22 22 23 24M29 28C31 27 33 27 34 29"/></symbol>
+  <symbol id="i-fist" viewBox="0 0 48 48"><path d="M12 22V16C12 13 17 13 17 16V12C17 9 22 9 22 12 22 9 27 9 27 12 27 9 32 9 32 13V22C36 22 38 26 36 30L33 40H17L11 32C9 28 10 23 12 22Z"/><path d="M17 16V22M22 12V22M27 13V22"/></symbol>
+  <symbol id="i-bed" viewBox="0 0 48 48"><path d="M5 38V12M5 30H43V38M43 30V22C43 19 40 18 37 18H20V30"/><circle cx="12" cy="23" r="4"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 48 48"><path d="M3 24C11 11 37 11 45 24 37 37 11 37 3 24Z"/><circle cx="24" cy="24" r="6"/></symbol>
+  <symbol id="i-door" viewBox="0 0 48 48"><path d="M10 44V12C10 5 38 5 38 12V44Z"/><path d="M19 22C19 14 29 14 29 22 29 27 24 27 24 32M24 37V38"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 48 48"><circle cx="24" cy="24" r="8"/><path d="M24 4V10M24 38V44M4 24H10M38 24H44M10 10l4 4M34 34l4 4M38 10l-4 4M14 34l-4 4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 48 48"><path d="M32 6C18 8 10 20 14 32 18 42 32 45 42 36 30 38 22 28 26 17 27 13 29 9 32 6Z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 48 48"><path d="M24 5L29 18 43 19 32 28 36 42 24 34 12 42 16 28 5 19 19 18Z"/></symbol>
+  <symbol id="i-voice" viewBox="0 0 48 48"><path d="M8 20V28H15L24 35V13L15 20Z"/><path d="M30 18C34 22 34 26 30 30M35 13C42 20 42 28 35 35"/></symbol>
+  <symbol id="i-map" viewBox="0 0 48 48"><path d="M5 12L17 8 31 12 43 8V36L31 40 17 36 5 40Z"/><path d="M17 8V36M31 12V40"/></symbol>
+  <symbol id="i-mark" viewBox="0 0 48 48"><path d="M11 11C20 20 28 28 37 37M37 11C28 20 20 28 11 37"/></symbol>
+  <symbol id="i-notebook" viewBox="0 0 48 48"><rect x="11" y="5" width="28" height="38" rx="3"/><path d="M7 12H15M7 20H15M7 28H15M7 36H15M20 15H33M20 23H33M20 31H29"/></symbol>
+ </defs>
+</svg>
+
+<div id="ui" class="ui">
+  <!-- HUD -->
+  <div id="hud" class="hud" hidden>
+    <div class="top-left">
+      <svg class="clock day-only" id="clock" viewBox="0 0 100 100" aria-label="Clock">
+        <circle cx="50" cy="50" r="46" class="clock-face"/>
+        <circle cx="50" cy="50" r="40" class="clock-dots"/>
+        <g class="clock-ticks"><path d="M50 12V20M12 50H20M80 50H88"/><path d="M69 17l-4 7M83 31l-7 4M83 69l-7-4M69 83l-4-7M31 83l4-7M17 69l7-4M17 31l7 4M31 17l4 7" class="thin"/></g>
+        <path d="M50 88V79" class="clock-red"/>
+        <g id="clock-m"><path d="M50 50V16" class="clock-hand"/></g>
+        <g id="clock-h"><path d="M50 50V28" class="clock-hand hour"/></g>
+        <circle cx="50" cy="50" r="3.5" class="clock-pin"/>
+      </svg>
+      <svg class="heart night-only" id="heart" viewBox="0 0 48 48" aria-label="Health">
+        <defs>
+          <clipPath id="heartShape"><path d="M24 41C8 29 6 18 13 12 18 8 23 11 24 16 25 11 30 8 35 12 42 18 40 29 24 41Z"/></clipPath>
+          <clipPath id="heartFill"><rect id="heart-rect" x="0" y="6" width="48" height="44"/></clipPath>
+        </defs>
+        <g clip-path="url(#heartShape)"><g clip-path="url(#heartFill)"><rect x="0" y="0" width="48" height="48" fill="url(#hHeart)"/></g></g>
+        <use href="#i-heart" width="48" height="48"/>
+      </svg>
+      <div class="date-tag"><small id="h-datelabel"></small><b id="h-date"></b><span id="h-phase" class="day-time"></span></div>
+    </div>
+
+    <div class="location"><strong id="h-loc"></strong><small id="h-world"></small></div>
+
+    <div class="top-right">
+      <button class="menu-button" id="btn-menu" type="button">Menu &middot; Esc</button>
+      <button class="minimap-btn" id="btn-minimap" type="button" aria-label="Open the map"><canvas id="minimap" width="480" height="300"></canvas></button>
+    </div>
+
+    <div class="bottom-left">
+      <button class="pack-btn" id="btn-pack" type="button" aria-label="Backpack"><svg class="icon"><use href="#i-pack"/></svg><span class="count" id="h-pack">0</span></button>
+      <div class="weapon-slot night-only" id="weapon" hidden><svg class="icon"><use id="weapon-use" href="#i-fist"/></svg><span id="weapon-name"></span></div>
+      <div class="pickup-chip" id="pickup" hidden></div>
+    </div>
+
+    <div class="prompt" id="prompt" hidden><span class="key" id="prompt-key">E</span><span id="prompt-label"></span></div>
+    <div class="subtitle" id="subtitle" hidden><em id="sub-speaker"></em><span id="sub-text"></span></div>
+
+    <div class="actions">
+      <button class="action" id="btn-map" type="button"><svg class="icon"><use href="#i-map"/></svg>Map <span class="key">M</span></button>
+      <button class="action" id="btn-notebook" type="button"><svg class="icon"><use href="#i-notebook"/></svg>Notebook <span class="key">N</span></button>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <section id="title" class="screen title-view" hidden>
+    <div class="title-copy">
+      <span class="eyebrow">A day worth dreaming about</span>
+      <h1>Sleep<span>On It</span></h1>
+      <div class="rule"></div>
+      <p class="tagline">Find things in the day. Tie them together before bed. See what they become tonight.</p>
+      <div class="title-menu" id="title-menu"></div>
+      <p class="save-caption" id="title-caption"></p>
+    </div>
+    <div class="stamp"><svg class="icon"><use href="#i-moon"/></svg><span>Dinner at six.<br>Bed by midnight.</span></div>
+  </section>
+
+  <!-- Transition -->
+  <section id="transition" class="screen transition" hidden>
+    <div><svg class="icon" id="transition-icon"><use href="#i-bed"/></svg><h2 id="transition-title"></h2><p id="transition-text"></p></div>
+  </section>
+
+  <!-- Summary -->
+  <section id="summary" class="screen summary-view" hidden></section>
+
+  <div class="reveal" id="reveal" hidden></div>
+  <div class="toast" id="toast" hidden></div>
+
+  <dialog id="panel"><div class="panel" id="panel-body"></div></dialog>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/world.js"></script>
+<script src="js/discovery.js"></script>
+<script src="js/fog.js"></script>
+<script src="js/player.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

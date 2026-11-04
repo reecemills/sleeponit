@@ -22,7 +22,7 @@ and open http://localhost:8080.
 | Key | Does |
 |---|---|
 | W A S D / arrows | Walk |
-| Mouse (hold right button or click the scene) | Turn the camera |
+| Drag the mouse, or right-click to lock it | Turn the camera |
 | E | Interact: pick up, look, go to bed |
 | Left click / J | Attack (dream only) |
 | Shift / Space | Dodge step (dream only) |

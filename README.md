@@ -6,6 +6,10 @@ This is the web playtest build. It runs in a browser with no install and no serv
 
 ## Play it
 
+**Play in the browser:** https://reecemills.github.io/sleeponit/
+
+Or run it locally:
+
 1. Download or clone this repository.
 2. Open `index.html` in Chrome, Edge or Firefox. Double-clicking the file works.
 

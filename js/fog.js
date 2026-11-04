@@ -17,7 +17,7 @@ SOI.fog = {
       moonDir: { value: new THREE.Vector3(0.6, 0.5, -0.2).normalize() },
       moonColor: { value: new THREE.Color(0x9a9ff0) },
       skyColor: { value: new THREE.Color(0x6a64a8) }, groundColor: { value: new THREE.Color(0x1a1630) },
-      fogColor: { value: new THREE.Color(0x0d0b17) }, fogDensity: { value: 0.028 },
+      fogColor: { value: new THREE.Color(0x2b2946) }, fogDensity: { value: 0.028 },
       playerPos: { value: new THREE.Vector3() },
     };
 
@@ -47,12 +47,12 @@ SOI.fog = {
           float ndl = max(dot(vNormalW, moonDir), 0.0);
           vec3 lit = vColor * (hemi * 2.0 + moonColor * ndl * 1.4) + vec3(0.02, 0.015, 0.04);
           // flat ground inside the fog: no props render there, and the ground reads as a bare, near-black plane
-          vec3 bare = vec3(0.045, 0.04, 0.06);
+          vec3 bare = vec3(0.14, 0.13, 0.23);
           vec3 col = mix(bare, lit, vis);
           // distance fog toward the camera
           float f = 1.0 - exp(-fogDensity * fogDensity * vDepthCam * vDepthCam);
           col = mix(col, fogColor, clamp(f, 0.0, 1.0));
-          col *= (1.0 - fade);
+          col = mix(col, fogColor, fade * 0.8);
           gl_FragColor = vec4(col, 1.0);
         }`,
     });

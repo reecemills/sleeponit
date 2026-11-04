@@ -48,35 +48,68 @@ SOI.player = {
   create(scene, camera, opts) {
     const T = SOI.data.tunables;
     const palettes = {
-      day:   { skin: 0xf3c9a4, shirt: 0xd9503f, stripe: 0xf3e9d0, pants: 0x3f6fb5, shoes: 0x35333d, cap: 0xe6a93c, hair: 0x5a3a22 },
-      dream: { skin: 0xc9c4d6, shirt: 0x2a2440, stripe: 0x4a4466, pants: 0x1b1830, shoes: 0x0d0b17, cap: 0x3a2e55, hair: 0x1a1428 },
+      day:   { skin: 0xf0c4a0, shirt: 0xe9dfc4, stripe: 0xdca835, stripeR: 0xc4553f, stripeB: 0x5d84ac, pants: 0x3f6a9a, cuff: 0x5f88b2, shoe: 0x6a8fb8, sole: 0xece6d4, lace: 0xf8f4e8, hair: 0x5a3a22, cap: 0x5a3a22, pack: 0x8b7b4a, packDark: 0x6b5d36, strap: 0x7d6e42, eye: 0xffffff, pupil: 0x3a2616, brow: 0x3a2616, mouth: 0xa5503f },
+      dream: { skin: 0xbab8cc, shirt: 0x6a6880, stripe: 0x6e6842, stripeR: 0x6a4450, stripeB: 0x3c4a6a, pants: 0x1c2240, cuff: 0x2c3454, shoe: 0x2e3450, sole: 0x8e8c9e, lace: 0xbab8cc, hair: 0x120e1c, cap: 0x120e1c, pack: 0x1f2a1a, packDark: 0x161e14, strap: 0x1a2416, eye: 0xf2f2f8, pupil: 0x0c0a14, brow: 0x0c0a14, mouth: 0x4a3a4a },
     };
     const group = new THREE.Group();
     const parts = {};
-    function part(name, geo, color, x, y, z) {
-      const m = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color }));
-      m.position.set(x, y, z); group.add(m); parts[name] = m; return m;
+    const M = {};
+    for (const k in palettes.day) M[k] = new THREE.MeshLambertMaterial({ color: palettes.day[k] });
+    const B = (w, h, d) => new THREE.BoxGeometry(w, h, d);
+    function add(parent, geo, key, x, y, z) { const m = new THREE.Mesh(geo, M[key]); m.position.set(x, y, z); parent.add(m); return m; }
+    function part(name, geo, key, x, y, z) { const m = add(group, geo, key, x, y, z); parts[name] = m; return m; }
+    // proportions of a ten-year-old: big head, long thin limbs. Total height ~1.35 m.
+    part('torso', B(0.40, 0.46, 0.25), 'shirt', 0, 0.76, 0);
+    part('stripe', B(0.415, 0.1, 0.265), 'stripe', 0, 0.81, 0);
+    part('stripeR', B(0.415, 0.1, 0.265), 'stripeR', 0, 0.91, 0);
+    part('stripeB', B(0.415, 0.1, 0.265), 'stripeB', 0, 0.71, 0);
+    part('neck', new THREE.CylinderGeometry(0.06, 0.07, 0.1, 8), 'skin', 0, 0.98, 0);
+    const head = part('head', new THREE.SphereGeometry(0.19, 14, 12), 'skin', 0, 1.1, 0);
+    for (const sx of [-1, 1]) {
+      add(head, new THREE.SphereGeometry(0.04, 6, 6), 'skin', sx * 0.185, 0, 0);
+      const e = add(head, new THREE.SphereGeometry(0.042, 8, 6), 'eye', sx * 0.075, 0.02, 0.165); e.scale.z = 0.6;
+      add(head, new THREE.SphereGeometry(0.022, 6, 6), 'pupil', sx * 0.075, 0.02, 0.185);
+      parts[sx < 0 ? 'browL' : 'browR'] = add(head, B(0.075, 0.016, 0.02), 'brow', sx * 0.075, 0.085, 0.165);
     }
-    // proportions of a ten-year-old: big head, short legs. Total height ~1.35 m.
-    part('torso', new THREE.BoxGeometry(0.42, 0.5, 0.26), 0xd9503f, 0, 0.78, 0);
-    part('stripe', new THREE.BoxGeometry(0.44, 0.08, 0.28), 0xf3e9d0, 0, 0.86, 0);
-    part('head', new THREE.SphereGeometry(0.21, 14, 12), 0xf3c9a4, 0, 1.2, 0);
-    part('hair', new THREE.SphereGeometry(0.215, 12, 8, 0, Math.PI * 2, 0, Math.PI * 0.5), 0x5a3a22, 0, 1.22, 0);
-    part('cap', new THREE.CylinderGeometry(0.23, 0.23, 0.08, 14), 0xe6a93c, 0, 1.33, 0);
-    part('brim', new THREE.BoxGeometry(0.2, 0.03, 0.22), 0xe6a93c, 0, 1.3, 0.22);
-    const legL = part('legL', new THREE.BoxGeometry(0.16, 0.5, 0.18), 0x3f6fb5, -0.11, 0.28, 0);
-    const legR = part('legR', new THREE.BoxGeometry(0.16, 0.5, 0.18), 0x3f6fb5, 0.11, 0.28, 0);
-    part('shoeL', new THREE.BoxGeometry(0.17, 0.08, 0.26), 0x35333d, -0.11, 0.04, 0.03);
-    part('shoeR', new THREE.BoxGeometry(0.17, 0.08, 0.26), 0x35333d, 0.11, 0.04, 0.03);
-    // arms pivot at the shoulder
-    const armL = new THREE.Group(); armL.position.set(-0.27, 1.0, 0); group.add(armL);
-    const armR = new THREE.Group(); armR.position.set(0.27, 1.0, 0); group.add(armR);
-    const armGeo = new THREE.BoxGeometry(0.12, 0.46, 0.12);
-    const armLM = new THREE.Mesh(armGeo, new THREE.MeshLambertMaterial({ color: 0xf3c9a4 })); armLM.position.y = -0.2; armL.add(armLM); parts.armL = armLM;
-    const armRM = new THREE.Mesh(armGeo, new THREE.MeshLambertMaterial({ color: 0xf3c9a4 })); armRM.position.y = -0.2; armR.add(armRM); parts.armR = armRM;
-    // backpack
-    part('pack', new THREE.BoxGeometry(0.34, 0.36, 0.16), 0x6c9a4a, 0, 0.82, -0.2);
+    parts.mouth = add(head, new THREE.TorusGeometry(0.04, 0.008, 4, 8, Math.PI), 'mouth', 0, -0.06, 0.165);
+    // tousled hair: a tilted cap of hair, a nape piece and spiky tufts
+    const hair = part('hair', new THREE.SphereGeometry(0.2, 12, 8, 0, Math.PI * 2, 0, Math.PI * 0.36), 'hair', 0, 1.12, -0.01);
+    hair.rotation.x = -0.3;
+    const nape = add(head, new THREE.SphereGeometry(0.195, 10, 8), 'hair', 0, 0.03, -0.04); nape.scale.y = 0.8;
+    const up = new THREE.Vector3(0, 1, 0);
+    for (const t of [[0, .19, .02, 0, 1, .3, .045, .1], [.1, .16, 0, 1, 1, 0, .04, .09], [-.1, .16, 0, -1, 1, 0, .04, .09], [.05, .15, .12, .3, .5, 1, .04, .09], [-.05, .15, .12, -.3, .5, 1, .04, .09], [0, .14, -.12, 0, .7, -1, .045, .1], [.14, .1, -.06, 1, .6, -.3, .04, .08], [-.14, .1, -.06, -1, .6, -.3, .04, .08]]) {
+      const m = add(hair, new THREE.ConeGeometry(t[6], t[7], 5), 'hair', 0, 0, 0);
+      const d = new THREE.Vector3(t[3], t[4], t[5]).normalize();
+      m.quaternion.setFromUnitVectors(up, d); m.position.set(t[0], t[1], t[2]).addScaledVector(d, t[7] * 0.4);
+    }
+    // the sheet has no cap: kept as hidden parts so the part keys stay valid
+    part('cap', B(0.01, 0.01, 0.01), 'cap', 0, 1.3, 0).visible = false;
+    part('brim', B(0.01, 0.01, 0.01), 'cap', 0, 1.3, 0.1).visible = false;
+    // jeans with rolled cuffs, high-top sneakers with white laces
+    const legL = part('legL', B(0.15, 0.5, 0.17), 'pants', -0.1, 0.28, 0);
+    const legR = part('legR', B(0.15, 0.5, 0.17), 'pants', 0.1, 0.28, 0);
+    add(legL, B(0.175, 0.08, 0.195), 'cuff', 0, -0.2, 0); add(legR, B(0.175, 0.08, 0.195), 'cuff', 0, -0.2, 0);
+    for (const [n, sx] of [['shoeL', -1], ['shoeR', 1]]) {
+      const s = part(n, B(0.17, 0.13, 0.27), 'shoe', sx * 0.1, 0.065, 0.03);
+      add(s, B(0.19, 0.035, 0.3), 'sole', 0, -0.07, 0.005);
+      add(s, B(0.16, 0.07, 0.08), 'sole', 0, -0.02, 0.1);
+      for (let i = 0; i < 3; i++) add(s, B(0.12, 0.012, 0.02), 'lace', 0, 0.067, -0.04 + i * 0.045);
+      const tail = add(s, B(0.012, 0.012, 0.14), 'lace', sx * 0.07, 0.07, 0.12); tail.rotation.y = sx * 0.5;
+    }
+    // arms pivot at the shoulder, short sleeves
+    const armL = new THREE.Group(); armL.position.set(-0.27, 0.96, 0); group.add(armL);
+    const armR = new THREE.Group(); armR.position.set(0.27, 0.96, 0); group.add(armR);
+    const armGeo = B(0.1, 0.46, 0.1);
+    const armLM = add(armL, armGeo, 'skin', 0, -0.2, 0); parts.armL = armLM;
+    const armRM = add(armR, armGeo, 'skin', 0, -0.2, 0); parts.armR = armRM;
+    for (const a of [armL, armR]) { add(a, B(0.15, 0.16, 0.15), 'shirt', 0, -0.06, 0); add(a, B(0.156, 0.04, 0.156), 'stripeR', 0, -0.1, 0); }
+    // canvas backpack: flap, back pocket, shoulder straps (all children, so they hide together)
+    const pack = part('pack', B(0.34, 0.4, 0.17), 'pack', 0, 0.8, -0.21);
+    add(pack, B(0.35, 0.14, 0.19), 'packDark', 0, 0.15, -0.01);
+    add(pack, B(0.28, 0.2, 0.07), 'packDark', 0, -0.08, -0.12);
+    for (const sx of [-1, 1]) add(pack, B(0.05, 0.34, 0.285), 'strap', sx * 0.12, 0.06, 0.21);
     const hand = new THREE.Group(); hand.position.set(0, -0.44, 0); armR.add(hand);
+    parts.fistR = add(hand, new THREE.SphereGeometry(0.06, 8, 6), 'skin', 0, -0.02, 0);
     scene.add(group);
 
     const p = {
@@ -87,14 +120,15 @@ SOI.player = {
       dash: null, attackPose: 0, colliders: null,
       setMode(mode) {
         this.mode = mode;
-        const c = palettes[mode];
-        parts.head.material.color.setHex(c.skin); parts.armL.material.color.setHex(c.skin); parts.armR.material.color.setHex(c.skin);
-        parts.torso.material.color.setHex(c.shirt); parts.stripe.material.color.setHex(c.stripe);
-        parts.legL.material.color.setHex(c.pants); parts.legR.material.color.setHex(c.pants);
-        parts.shoeL.material.color.setHex(c.shoes); parts.shoeR.material.color.setHex(c.shoes);
-        parts.cap.material.color.setHex(c.cap); parts.brim.material.color.setHex(c.cap); parts.hair.material.color.setHex(c.hair);
-        parts.pack.material.color.setHex(mode === 'day' ? 0x6c9a4a : 0x1f2a1a);
-        parts.pack.visible = mode === 'day';
+        const c = palettes[mode], dream = mode === 'dream';
+        for (const k in c) M[k].color.setHex(c[k]);
+        parts.pack.visible = true; // the sheet and the combat mockup both show the pack in the dream
+        parts.cap.visible = false; parts.brim.visible = false;
+        // hopeful brows and a smile by day; a glare and a frown in the dream
+        parts.browL.rotation.z = dream ? -0.5 : 0.12; parts.browR.rotation.z = dream ? 0.5 : -0.12;
+        parts.mouth.rotation.z = dream ? 0 : Math.PI;
+        parts.mouth.position.y = dream ? -0.115 : -0.06; parts.mouth.position.z = dream ? 0.155 : 0.165;
+        parts.mouth.scale.setScalar(dream ? 0.7 : 1);
       },
       setPosition(x, z, rotY) {
         group.position.set(x, 0, z); this.rotY = rotY || 0; group.rotation.y = this.rotY;

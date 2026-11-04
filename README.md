@@ -59,6 +59,7 @@ js/combat.js      chain weapon, chalk heart, shoelace demons
 js/ui.js          HUD, minimap, panels
 js/game.js        the state machine: title, day, bedroom, dream, wake
 vendor/three.min.js  Three.js r159 (classic build so file:// works)
+art/              web-sized copies of the approved paintings used as backdrops
 ```
 
 Design documents, concept art and mockups live in the parent project folder, not in this repository.

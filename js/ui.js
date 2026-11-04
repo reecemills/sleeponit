@@ -83,6 +83,7 @@
     transitionActive = true;
     var t = el.transition;
     t.classList.remove('fade');
+    t.classList.toggle('to-night', !!d.toNight);
     t.hidden = false;
     var u = $('transition-icon').firstChild;
     u.setAttribute('href', d.toNight ? '#i-bed' : '#i-sun');
@@ -494,6 +495,7 @@
     body.textContent = '';
     body.appendChild(node);
     current = { type: type, data: data };
+    el.panel.classList.toggle('map-open', type === 'map');
     if (!el.panel.open) {
       el.panel.showModal();
     }

@@ -72,7 +72,7 @@ SOI.game = (() => {
     resize(); window.addEventListener('resize', resize);
     fadeEl = document.createElement('div');
     fadeEl.id = 'fogFade';
-    Object.assign(fadeEl.style, { position: 'fixed', inset: '0', background: '#000', opacity: '0', pointerEvents: 'none', zIndex: '5', transition: 'opacity .3s' });
+    Object.assign(fadeEl.style, { position: 'fixed', inset: '0', background: '#2b2946', opacity: '0', pointerEvents: 'none', zIndex: '5', transition: 'opacity .3s' });
     document.body.appendChild(fadeEl);
 
     state = load();
@@ -140,7 +140,7 @@ SOI.game = (() => {
     phase = 'dream'; inHouse = false;
     world = SOI.world.build(scene, 'dream');
     scene.background = new THREE.Color(world.skyColor);
-    scene.fog = new THREE.FogExp2(world.skyColor, 0.028);
+    scene.fog = new THREE.FogExp2(0x2b2946, 0.028);
     fog = SOI.fog.apply(world, discovery, T);
     player = SOI.player.create(scene, camera, { mode: 'dream' });
     player.colliders = world.colliders;
@@ -405,7 +405,7 @@ SOI.game = (() => {
       const r = combat.update(dt, input, world.colliders);
       const fr = fog.update(player.position, scene.fog);
       fogDepth = fr.depth; lostNow = fr.lost;
-      fadeEl.style.opacity = String(fr.fade * 0.85);
+      fadeEl.style.opacity = String(fr.fade * 0.6);
       if (r.hitThisFrame) { SOI.ui.toast(r.heart > 0 ? 'They have your laces.' : ''); }
       dreamLeft -= dt;
       trailTimer -= dt;

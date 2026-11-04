@@ -42,16 +42,36 @@ SOI.combat = {
     // ---- demons
     const laceMat = new THREE.MeshLambertMaterial({ color: 0xece9f5 });
     const bodyMat = new THREE.MeshLambertMaterial({ color: 0x15121f });
-    const eyeMat = new THREE.MeshBasicMaterial({ color: 0xffb347 });
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0xffd36b });
     function makeDemon(x, z) {
       const g = new THREE.Group();
-      const body = new THREE.Mesh(new THREE.SphereGeometry(0.34, 10, 8), bodyMat); body.position.y = 0.36; body.scale.y = 0.85; g.add(body);
-      for (const sx of [-1, 1]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.06, 6, 6), eyeMat); e.position.set(sx * 0.13, 0.44, 0.28); g.add(e); }
+      // low dark hunched body (squash baked into the geometry so children are not distorted)
+      const bgeo = new THREE.SphereGeometry(0.23, 10, 8); bgeo.scale(1.1, 0.85, 1);
+      const body = new THREE.Mesh(bgeo, bodyMat); body.position.y = 0.36; g.add(body);
+      const dark = (geo, px, py, pz) => { const m = new THREE.Mesh(geo, bodyMat); m.position.set(px, py, pz); body.add(m); return m; };
+      for (const sx of [-1, 1]) {
+        // tall pointed cat ears
+        const ear = dark(new THREE.ConeGeometry(0.06, 0.15, 4), sx * 0.13, 0.2, 0.0); ear.rotation.z = -sx * 0.25;
+        // glowing oval eyes
+        const e = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 6), eyeMat); e.position.set(sx * 0.1, 0.05, 0.19); e.scale.set(0.8, 1.3, 0.5); body.add(e);
+        // spindly arms with claws, reaching forward
+        const arm = dark(new THREE.CylinderGeometry(0.014, 0.02, 0.26, 5), sx * 0.24, -0.02, 0.12); arm.rotation.set(1.1, 0, -sx * 0.5);
+        const claw = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.07, 4), laceMat); claw.position.set(sx * 0.31, -0.08, 0.26); claw.rotation.set(1.6, 0, -sx * 0.4); body.add(claw);
+        // bent legs
+        const leg = dark(new THREE.CylinderGeometry(0.018, 0.024, 0.3, 5), sx * 0.13, -0.2, 0.02); leg.rotation.z = sx * 0.3;
+      }
+      // grin of tiny teeth
+      for (let i = -2; i <= 2; i++) { const t = new THREE.Mesh(new THREE.ConeGeometry(0.014, 0.045, 4), laceMat); t.position.set(i * 0.04, -0.07, 0.205); t.rotation.x = Math.PI; body.add(t); }
+      // a cap of knotted lace between the ears
+      const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(0.06, 0.014, 24, 5), laceMat); knot.position.set(0, 0.2, 0.03); knot.rotation.x = 1.2; body.add(knot);
+      // flailing lace tendrils, pivoting at their roots
       const laces = [];
-      for (let i = 0; i < 3; i++) {
-        const l = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.015, 0.9, 5), laceMat);
-        l.geometry.translate(0, 0.45, 0);
-        l.position.set(Math.cos(i * 2.1) * 0.2, 0.3, Math.sin(i * 2.1) * 0.2);
+      for (let i = 0; i < 5; i++) {
+        const lg = new THREE.BoxGeometry(0.04, 0.62, 0.012); lg.translate(0, 0.31, 0);
+        const l = new THREE.Mesh(lg, laceMat);
+        const a = i * Math.PI * 2 / 5 + 0.4;
+        l.position.set(Math.cos(a) * 0.17, 0.3, Math.sin(a) * 0.17); l.rotation.y = -a;
+        const tip = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.02), bodyMat); tip.position.y = 0.62; l.add(tip);
         g.add(l); laces.push(l);
       }
       g.position.set(x, 0, z);

@@ -224,3 +224,13 @@ body.reduced *, body.reduced *::before, body.reduced *::after { animation: none 
   .grid5 { gap: 6px; }
   .help-keys { grid-template-columns: 1fr; gap: 4px 0; }
 }
+
+/* ---- Approved paintings as backdrops (art/ is web-sized copies of art/concept and art/mockup) ---- */
+.title-view { background-image: linear-gradient(90deg, #151522f2 0%, #151522d8 38%, #2a1e3a99 70%, #4a2e3e55 100%), url(../art/title-day.jpg); background-size: cover; background-position: center; }
+body.night .title-view { background-image: linear-gradient(90deg, #0d0b17f2 0%, #0d0b17d8 38%, #1a163099 70%, #1a163055 100%), url(../art/title-dream.jpg); }
+.transition { background-image: linear-gradient(180deg, #100d1dcc, #100d1d99 40%, #100d1dcc), url(../art/wake-fog.jpg); background-size: cover; background-position: center; }
+.transition.to-night { background-image: linear-gradient(180deg, #100d1dcc, #100d1d99 40%, #100d1dcc), url(../art/sleep-gate.jpg); }
+.transition h2, .transition p { text-shadow: 0 2px 8px #000, 0 0 24px #000; }
+.summary-view { background-image: linear-gradient(#0d0b17cc, #0d0b17cc), url(../art/summary-overhead.jpg); background-size: cover; background-position: center; }
+#panel.map-open::backdrop { background-image: linear-gradient(#2a2118aa, #2a2118aa), url(../art/map-day.jpg); background-size: cover; background-position: center; backdrop-filter: blur(2px); }
+body.night #panel.map-open::backdrop { background-image: linear-gradient(#0d0b17aa, #0d0b17aa), url(../art/map-night.jpg); }
